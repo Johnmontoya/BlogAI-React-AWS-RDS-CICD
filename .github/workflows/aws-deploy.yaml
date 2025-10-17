@@ -1,0 +1,11 @@
+name: Deploy to AWS
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        name: Deploy to AWS ECS
+        runs-on: ubuntu-latest
