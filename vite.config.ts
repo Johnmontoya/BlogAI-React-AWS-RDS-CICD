@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/",
   plugins: [react()],
-  preview: {
+  /*preview: {
     port: 5173,
     strictPort: true,
   },
@@ -16,5 +16,5 @@ export default defineConfig({
     allowedHosts: [
       "lb-blog-app-aws-cicd-1040057830.us-east-1.elb.amazonaws.com", // <-- ¡Añadido!
     ],
-  },
+  },*/
 });
