@@ -8,13 +8,13 @@ export default defineConfig({
   /*preview: {
     port: 5173,
     strictPort: true,
-  },
+  },*/
   server: {
-    port: 5173,
+    port: 8000,
     strictPort: true,
-    host: true,
+    host: '0.0.0.0',
     allowedHosts: [
       "lb-blog-app-aws-cicd-1040057830.us-east-1.elb.amazonaws.com", // <-- ¡Añadido!
     ],
-  },*/
+  },
 });
