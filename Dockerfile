@@ -4,9 +4,9 @@ FROM node:21.7.3 AS build
 WORKDIR /app
 
 # Copia solo los archivos de dependencias y las instala
-COPY package*.json .
+COPY package.json .
 RUN npm install
-COPY .  .
+COPY . .
 
 EXPOSE 8000
 
