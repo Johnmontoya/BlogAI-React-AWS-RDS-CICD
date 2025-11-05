@@ -27,7 +27,7 @@ const BlogCard = ({ blog }: BlogCardProps) => {
       </span>
       <div className="p-5">
         <h5 className="mb-2 font-medium text-gray-900">{titulo}</h5>
-        <p className="mb-3 text-xs text-gray-600">{descripcion.slice(0, 80)}</p>
+        <p className="mb-3 text-xs text-gray-600" dangerouslySetInnerHTML={{"__html": descripcion.slice(0, 80)}}></p>
       </div>
     </div>
   );
