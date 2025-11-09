@@ -1,6 +1,26 @@
 import { FaRegStar } from "react-icons/fa6";
+import { useAppContext, type AppContextType } from "../context/appContext";
+import { useRef } from "react";
 
 const Header = () => {
+
+  const {setInput, input} = useAppContext() as AppContextType;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onSubmitHandler = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (inputRef.current) {
+      setInput(inputRef.current.value);
+    }
+  }
+
+  const onClear = () => {
+    setInput('')
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  }
+
   return (
     <div className="mx-8 sm:mx-16 xl:mx-24 relative">
       <div className="text-center mt-20 mb-8">
@@ -17,9 +37,10 @@ const Header = () => {
         Whether it-s one word or a thousand, your story starts right here"
         </p>
 
-        <form className="flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-stone-100 rounded overglow-hidden">
+        <form onSubmit={onSubmitHandler} className="flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-stone-100 rounded overglow-hidden">
           <input
             type="text"
+            ref={inputRef}
             placeholder="Search for blogs"
             required
             className="w-full pl-4 outline-none"
@@ -31,6 +52,14 @@ const Header = () => {
             Search
           </button>
         </form>
+      </div>
+      
+      <div className="text-center">
+        {
+          input && <button onClick={onClear} className="border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer">
+          Clear Search
+        </button>
+        }
       </div>
     </div>
   );

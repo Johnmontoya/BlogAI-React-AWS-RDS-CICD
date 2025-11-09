@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useAppContext, type AppContextType } from "../../context/appContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Login: React.FC = () => {
+
+  const {axios: axiosInstance, setToken} = useAppContext() as AppContextType;
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -12,30 +18,35 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Aquí iría tu lógica de autenticación
-      // Ejemplo:
-      // const response = await loginUser(email, password);
-      // if (response.success) {
-      //   // Guardar token y redirigir al dashboard
-      //   localStorage.setItem('adminToken', response.token);
-      //   navigate('/admin/dashboard');
-      // }
+      const {data} = await axios.post('/api/admin/login', {email, password});
 
-      console.log("Login attempt with:", { email, password });
-      
-      // Simulación de login (reemplazar con tu lógica real)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Ejemplo de validación básica
-      if (email === "admin@example.com" && password === "password123") {
-        console.log("Login successful");
-        // Redirigir al dashboard
+      if(data.success) {
+        setToken(data.token)
+        localStorage.setItem('token', data.token)
+        axiosInstance.defaults.headers.common['Authorization'] = data.token;
       } else {
-        setError("Invalid email or password");
+        toast.error(data.message);
       }
-    } catch (err) {
-      setError("An error occurred during login. Please try again.");
-      console.error("Login error:", err);
+
+    } catch (err: unknown) {
+      let errorMessage = "An unexpected error occurred.";
+
+      if (axios.isAxiosError(err)) {
+        // Si hay una respuesta del servidor (código 4xx, 5xx)
+        if (err.response && err.response.data && err.response.data.message) {
+          // El error más específico del backend
+          errorMessage = err.response.data.message;
+        } else if (err.message) {
+          // Error de red (ej: desconexión) o timeout
+          errorMessage = err.message;
+        }
+      } else if (err instanceof Error) {
+        // Si es un error de JavaScript estándar (no de Axios)
+        errorMessage = err.message;
+      }
+      
+      toast.error(errorMessage);
+      
     } finally {
       setIsLoading(false);
     }

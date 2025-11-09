@@ -1,19 +1,21 @@
+import axios from "axios";
 import { CiStickyNote } from "react-icons/ci";
+import { useAppContext, type AppContextType } from "../../context/appContext";
+import toast from "react-hot-toast";
 
 // Interfaz actualizada según la estructura real de datos
 interface BlogInfo {
-  id: string;
-  titulo: string; // Cambiado de 'title' a 'titulo' según tus datos
+  _id: string;
+  title: string; // Cambiado de 'title' a 'titulo' según tus datos
 }
 
 interface Comment {
   _id: string;
-  blog: string; // La referencia original (ej: "blog_data[0]")
+  blog: BlogInfo; // La referencia original (ej: "blog_data[0]")
   name: string;
   content: string;
   createdAt: string | Date;
   isApproved: boolean;
-  blogInfo?: BlogInfo; // Información enriquecida del blog (opcional)
 }
 
 interface CommentTableItemProps {
@@ -22,35 +24,59 @@ interface CommentTableItemProps {
   index?: number; // Opcional, si quieres mostrar números
 }
 
-const CommenTableItem: React.FC<CommentTableItemProps> = ({ 
-  comment, 
+const CommenTableItem: React.FC<CommentTableItemProps> = ({
+  comment,
   fetchComments,
-  index 
+  index,
 }) => {
-  const { blogInfo, createdAt, _id, name, content, isApproved } = comment;
+  const { createdAt, _id, name, content, isApproved } = comment;
   const BlogDate = new Date(createdAt);
+
+  const {axios: axiosInstance} = useAppContext() as AppContextType;
+
+  // Función de utilidad para manejar errores de Axios
+  const getErrorMessage = (err: unknown): string => {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.data?.message) {
+        return err.response.data.message;
+      }
+      return err.message;
+    }
+    return "An unexpected error occurred.";
+  };
 
   const handleApproveComment = async () => {
     try {
-      // Aquí iría la lógica real para aprobar el comentario
-      // Por ejemplo: await approveComment(_id);
+      const { data } = await axiosInstance.post('/api/admin/approve-comment', {id: _id})
+
+      if(data.success) {
+        toast.success(data.message)
+        await fetchComments();
+      } else {
+        toast.error(data.message)
+      }
       
-      console.log(`Approving comment ${_id}`);
-      
-      // Por ahora, solo recargamos los comentarios
-      // En producción, harías una llamada al backend primero
-      await fetchComments();
     } catch (error) {
-      console.error("Error approving comment:", error);
+      toast.error(getErrorMessage(error))
     }
   };
 
   const handleUnapproveComment = async () => {
     try {
-      console.log(`Unapproving comment ${_id}`);
-      await fetchComments();
+      const confirm = window.confirm('Are you sure you want to delete this comment?')
+      if(!confirm) return;
+
+      const { data } = await axiosInstance.post('/api/admin/delete-comment', {id: _id})
+
+      if(data.success) {
+        toast.success(data.message)
+        await fetchComments();
+      } else {
+        toast.error(data.message)
+      }
+      
     } catch (error) {
-      console.error("Error unapproving comment:", error);
+      toast.error(getErrorMessage(error))
     }
   };
 
@@ -61,7 +87,7 @@ const CommenTableItem: React.FC<CommentTableItemProps> = ({
           <p>
             <span className="font-medium text-gray-600">Blog:</span>{" "}
             <span className="text-gray-800">
-              {blogInfo?.titulo || "Unknown Blog"}
+              {comment.blog?.title || "Unknown Blog"}
             </span>
           </p>
           <p>
@@ -78,16 +104,16 @@ const CommenTableItem: React.FC<CommentTableItemProps> = ({
         <div className="flex flex-col">
           <span>{BlogDate.toLocaleDateString()}</span>
           <span className="text-xs text-gray-400">
-            {BlogDate.toLocaleTimeString([], { 
-              hour: '2-digit', 
-              minute: '2-digit' 
+            {BlogDate.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
             })}
           </span>
         </div>
       </td>
       <td className="px-6 py-4">
         <div className="flex items-center gap-2">
-          {!isApproved ? (
+          {!comment.isApproved ? (
             <button
               onClick={handleApproveComment}
               className="group flex items-center gap-2 px-3 py-1.5 border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors"

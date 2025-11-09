@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
-import { comments_data, blogData } from "../../assets/assets";
 import CommenTableItem from "../../components/admin/CommenTableItem";
+import { useAppContext, type AppContextType } from "../../context/appContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+// Interfaz actualizada según la estructura real de datos
+interface BlogInfo {
+  _id: string;
+  title: string; // Cambiado de 'title' a 'titulo' según tus datos
+}
 
 // Interfaz actualizada según la estructura real de tus datos
 interface Comment {
   _id: string;
-  blog: string; // Referencia al blog (ej: "blog_data[0]")
+  blog: BlogInfo; // Referencia al blog (ej: "blog_data[0]")
   name: string;
   content: string;
   isApproved: boolean;
@@ -14,43 +22,33 @@ interface Comment {
   __v: number;
 }
 
-// Interfaz para el comentario enriquecido con info del blog
-interface EnrichedComment extends Comment {
-  blogInfo?: {
-    id: string;
-    titulo: string;
-  };
-}
-
 type FilterType = "Approved" | "Not Approved";
 
 const Comments = () => {
-  const [comments, setComments] = useState<EnrichedComment[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [filter, setFilter] = useState<FilterType>("Not Approved");
 
+  const {axios: axiosInstance} = useAppContext() as AppContextType;
+
+  // Función de utilidad para manejar errores de Axios
+    const getErrorMessage = (err: unknown): string => {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data?.message) {
+          return err.response.data.message;
+        }
+        return err.message;
+      }
+      return "An unexpected error occurred.";
+    };
+
   const fetchComments = async () => {
-    // Enriquecer los comentarios con información del blog
-    const enrichedComments = comments_data.map(comment => {
-      // Extraer el índice del blog desde la referencia (ej: "blog_data[0]" -> 0)
-      const blogIndexMatch = comment.blog.match(/\[(\d+)\]/);
-      const blogIndex = blogIndexMatch ? parseInt(blogIndexMatch[1]) : null;
-      
-      // Obtener la información del blog si existe el índice
-      const blogInfo = blogIndex !== null && blogData[blogIndex] 
-        ? {
-            id: blogData[blogIndex].id,
-            titulo: blogData[blogIndex].titulo
-          }
-        : undefined;
-
-      return {
-        ...comment,
-        blogInfo
-      };
-    });
-
-    setComments(enrichedComments);
-  };
+    try {
+      const { data } = await axiosInstance.get('/api/blog/comments/all')
+      data.success ? setComments(data.comments) : toast.error(data.message)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
+  };  
 
   useEffect(() => {
     fetchComments();

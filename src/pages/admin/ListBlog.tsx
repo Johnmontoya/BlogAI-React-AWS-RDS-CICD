@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import { blogData } from '../../assets/assets';
 import BlogTableItem from '../../components/admin/BlogTableItem';
+import { useAppContext, type AppContextType } from '../../context/appContext';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export interface Blog {
-  id: string;
-  titulo: string;
-  subTitulo: string;
-  descripcion: string;
-  categoria: string;
+  _id: string;
+  title: string;
+  subTitle: string;
+  description: string;
+  category: string;
   image: string;
   isPublished: boolean;
   createdAt: string;
@@ -16,9 +18,30 @@ export interface Blog {
 
 const ListBlog = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
+    const {axios: axiosInstance} = useAppContext() as AppContextType;
+
+    // Función de utilidad para manejar errores de Axios
+    const getErrorMessage = (err: unknown): string => {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data?.message) {
+          return err.response.data.message;
+        }
+        return err.message;
+      }
+      return "An unexpected error occurred.";
+    };
 
     const fetchBlogs = async() => {
-        setBlogs(blogData)
+      try {
+        const { data } = await axiosInstance.get('/api/admin/blogs')
+        if (data.success) {
+          setBlogs(data.blogs)
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        toast.error(getErrorMessage(error));
+      }
     }
 
     useEffect(() => {
@@ -40,7 +63,7 @@ const ListBlog = () => {
             </thead>
             <tbody>
               {blogs.map((blog, index) => {
-                return <BlogTableItem key={blog.id} blog={blog} fetchBlogs={fetchBlogs} index={
+                return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchBlogs} index={
                   index + 1
                 } />
               })}

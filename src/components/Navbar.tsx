@@ -1,9 +1,10 @@
 import { FaArrowRightLong } from "react-icons/fa6";
 import { assets } from "../assets/assets";
-import { useNavigate } from "react-router-dom";
+import { useAppContext, type AppContextType } from "../context/appContext";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const {navigate, token} = useAppContext() as AppContextType;
+
   return (
     <div className="flex justify-between items-center py-5 mx-8 sm:mx-29 xl:mx-32 cursor-pointer">
       <img
@@ -16,7 +17,7 @@ const Navbar = () => {
         className="flex items-center gap-2 rounded-full bg-rose-600 text-sm cursor-pointer text-stone-50 px-10 py-2.5"
         onClick={() => navigate("/admin")}
       >
-        Login
+        {token ? 'Dashboard' : 'Login'}
         <FaArrowRightLong className="w-3" />
       </button>
     </div>

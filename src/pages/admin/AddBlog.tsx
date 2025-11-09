@@ -2,133 +2,147 @@ import { useEffect, useRef, useState } from "react";
 import { assets, blogCategories } from "../../assets/assets";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import { useAppContext, type AppContextType } from "../../context/appContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const AddBlog = () => {
+  const { axios: axiosInstance } = useAppContext() as AppContextType;
+
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
-  const isQuillInitialized = useRef<boolean>(false); // Prevenir múltiples inicializaciones
 
   const [image, setImage] = useState<File | null>(null);
   const [title, setTitle] = useState<string>("");
   const [subTitle, setSubTitle] = useState<string>("");
   const [category, setCategory] = useState<string>("Startup");
   const [isPublished, setIsPublished] = useState<boolean>(false);
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Función de utilidad para manejar errores de Axios
+  const getErrorMessage = (err: unknown): string => {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.data?.message) {
+        return err.response.data.message;
+      }
+      return err.message;
+    }
+    return "An unexpected error occurred.";
+  };
 
   const generateContent = async () => {
-    if (!quillRef.current) return;
-    
-    setIsGenerating(true);
+    if (!title) return toast.error("Please enter a title");
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const generatedContent = `
-        <h2>Contenido generado por IA</h2>
-        <p>Este es un contenido de ejemplo generado automáticamente basado en el título: <strong>${title}</strong></p>
-        <p>Y el subtítulo: <em>${subTitle}</em></p>
-      `;
-      
-      quillRef.current.root.innerHTML = generatedContent;
+      setLoading(true);
+      const { data } = await axiosInstance.post("/api/blog/generate", {
+        prompt: title,
+      });
+
+      if (data.success && quillRef.current) {
+        quillRef.current.root.innerHTML = data.content;
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
-      console.error("Error generating content:", error);
-      alert("Error al generar contenido. Por favor, intenta de nuevo.");
+      toast.error(getErrorMessage(error));
     } finally {
-      setIsGenerating(false);
+      setLoading(false);
     }
   };
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!quillRef.current) {
-      alert("El editor no está inicializado");
+      toast.error("El editor no está inicializado");
       return;
     }
 
-    setIsSubmitting(true);
+    setIsAdding(true);
 
     try {
-      const descripcion = quillRef.current.root.innerHTML;
+      const description = quillRef.current.root.innerHTML;
 
-      if (!descripcion || descripcion === '<p><br></p>') {
-        alert("Por favor, escribe una descripción para el blog");
-        setIsSubmitting(false);
+      if (!description || description === "<p><br></p>") {
+        toast.error("Por favor, escribe una descripción para el blog");
+        setIsAdding(false);
         return;
       }
 
       const blogData = {
-        titulo: title,
-        subTitulo: subTitle,
-        descripcion: descripcion,
-        categoria: category,
-        image: image,
-        isPublished: isPublished,
+        title,
+        subTitle,
+        description,
+        category,
+        image,
+        isPublished,
         createdAt: new Date().toISOString(),
       };
 
-      console.log("Blog data:", blogData);
+      const formData = new FormData();
+      formData.append("blog", JSON.stringify(blogData));
+      formData.append("image", image!);
 
-      // Limpiar el formulario
-      setTitle("");
-      setSubTitle("");
-      setCategory("Startup");
-      setIsPublished(false);
-      setImage(null);
-      if (quillRef.current) {
-        quillRef.current.root.innerHTML = "";
+      const { data } = await axiosInstance.post(`/api/blog/add`, formData);
+
+      if (data.success) {
+        toast.success(data.message);
+        // Limpiar el formulario
+        setTitle("");
+        setSubTitle("");
+        setCategory("Startup");
+        setIsPublished(false);
+        setImage(null);
+        if (quillRef.current) {
+          quillRef.current.root.innerHTML = "";
+        }
+      } else {
+        toast.error(data.message);
       }
-
-      alert("¡Blog creado exitosamente!");
     } catch (error) {
-      console.error("Error creating blog:", error);
-      alert("Error al crear el blog. Por favor, intenta de nuevo.");
+      toast.error(getErrorMessage(error));
     } finally {
-      setIsSubmitting(false);
+      setIsAdding(false);
     }
   };
 
   useEffect(() => {
-    // Prevenir inicialización múltiple
-    if (isQuillInitialized.current || !editorRef.current) {
-      return;
+    // Inicializar Quill solo si no existe y el ref está disponible
+    if (editorRef.current && !quillRef.current) {
+      quillRef.current = new Quill(editorRef.current, {
+        theme: "snow",
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ color: [] }, { background: [] }],
+            ["link", "image"],
+            ["clean"],
+          ],
+        },
+        placeholder: "Escribe tu contenido aquí...",
+      });
     }
 
-    // Inicializar Quill solo una vez
-    quillRef.current = new Quill(editorRef.current, {
-      theme: "snow",
-      modules: {
-        toolbar: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          [{ color: [] }, { background: [] }],
-          ["link", "image"],
-          ["clean"],
-        ],
-      },
-      placeholder: "Escribe tu contenido aquí...",
-    });
-
-    isQuillInitialized.current = true;
-
-    // Cleanup al desmontar
+    // Cleanup al desmontar el componente
     return () => {
       if (quillRef.current) {
         quillRef.current = null;
       }
-      isQuillInitialized.current = false;
     };
-  }, []); // Array de dependencias vacío - ejecutar solo una vez
+  }, []);
 
   return (
-    <form 
-      onSubmit={onSubmitHandler} 
+    <form
+      onSubmit={onSubmitHandler}
       className="flex-1 bg-blue-50/50 text-gray-600 min-h-screen overflow-auto"
     >
       <div className="bg-white w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Add New Blog</h1>
-        
+
         <p className="font-medium mb-2">Upload thumbnail</p>
         <label htmlFor="image" className="cursor-pointer">
           <img
@@ -167,16 +181,26 @@ const AddBlog = () => {
         />
 
         <p className="mt-6 font-medium mb-2">Blog Description</p>
-        <div className="max-w-lg min-h-[300px] pb-16 sm:pb-10 pt-2 relative">
-          {/* Contenedor del editor - sin border aquí para evitar duplicación */}
-          <div ref={editorRef} className="h-[250px] border border-gray-300 rounded"></div>
+        <div className="max-w-lg pb-16 sm:pb-10 relative">
+          {/* Contenedor del editor - Quill agregará su propia estructura */}
+          <div
+            ref={editorRef}
+            className="min-h-[250px] border border-gray-300 rounded overflow-hidden"
+          />
+          
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded">
+              <div className="w-8 h-8 rounded-full border-2 border-t-white animate-spin"></div>
+            </div>
+          )}
+          
           <button
             type="button"
             onClick={generateContent}
-            disabled={!title || !subTitle || isGenerating}
-            className="absolute bottom-2 right-2 text-xs text-white bg-black/70 px-4 py-2 rounded hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            disabled={loading || !title}
+            className="absolute bottom-2 right-2 text-xs text-white bg-black/70 px-4 py-2 rounded hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 z-10"
           >
-            {isGenerating ? (
+            {loading ? (
               <>
                 <span className="animate-spin">⚙️</span>
                 Generating...
@@ -186,9 +210,10 @@ const AddBlog = () => {
             )}
           </button>
         </div>
-        {(!title || !subTitle) && (
+        
+        {!title && (
           <p className="text-xs text-gray-500 mt-1">
-            * Add title and subtitle to enable AI generation
+            * Add title to enable AI generation
           </p>
         )}
 
@@ -221,10 +246,10 @@ const AddBlog = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isAdding}
           className="mt-8 w-40 h-11 bg-rose-600 text-white rounded cursor-pointer text-sm font-medium hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Adding..." : "Add Blog"}
+          {isAdding ? "Adding..." : "Add Blog"}
         </button>
       </div>
     </form>

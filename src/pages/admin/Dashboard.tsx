@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import BlogTableItem from "../../components/admin/BlogTableItem";
-import { dashboard_data } from "../../assets/assets";
+import { useAppContext, type AppContextType } from "../../context/appContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -10,31 +12,49 @@ const Dashboard = () => {
     recentBlogs: [],
   });
 
+  const { axios: axiosInstance } = useAppContext() as AppContextType;
+
+  // Función de utilidad para manejar errores de Axios
+    const getErrorMessage = (err: unknown): string => {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data?.message) {
+          return err.response.data.message;
+        }
+        return err.message;
+      }
+      return "An unexpected error occurred.";
+    };
+
   const fetchDashboard = async () => {
-    setDashboardData(dashboardData);
+    try {
+      const { data } = await axiosInstance.get('/api/blog/dashboard')
+      data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
   };
 
   useEffect(() => {
-    fetchDashboard;
+    fetchDashboard();
   }, []);
 
   return (
     <div className="flex-1 p-4 md:p-10 bg-blue-50/50">
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
-          <p className="text-xl font-semibold text-gray-600">{dashboard_data.blogs}</p>
+          <p className="text-xl font-semibold text-gray-600">{dashboardData.blogs}</p>
           <p className="text-gray-400 font-light">Blogs</p>
         </div>
       </div>
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
-          <p className="text-xl font-semibold text-gray-600">{dashboard_data.comments}</p>
+          <p className="text-xl font-semibold text-gray-600">{dashboardData.comments}</p>
           <p className="text-gray-400 font-light">Comments</p>
         </div>
       </div>
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
-          <p className="text-xl font-semibold text-gray-600">{dashboard_data.drafts}</p>
+          <p className="text-xl font-semibold text-gray-600">{dashboardData.drafts}</p>
           <p className="text-gray-400 font-light">Drafts</p>
         </div>
       </div>
@@ -56,8 +76,8 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {dashboard_data.recentBlogs.map((blog, index) => {
-                return <BlogTableItem key={blog.id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1} />
+              {dashboardData.recentBlogs.map((blog, index) => {
+                return <BlogTableItem key={index} blog={blog} fetchBlogs={fetchDashboard} index={index + 1} />
               })}
             </tbody>
           </table>

@@ -10,7 +10,7 @@ export const blogCategories = ['All', 'Technology', 'Startup', 'Lifestyle', 'Fin
 
 export const blogData = [
     {
-    "id": "1",
+    "id": "66129188e9981f4404040a43",
     "titulo": "Las 5 Tendencias de IA que Dominarán 2026",
     "subTitulo": "Análisis detallado y predicciones de los modelos de machine learning y deep learning.",
     "descripcion": "La inteligencia artificial sigue revolucionando industrias. Exploramos cómo el aprendizaje federado, la IA ética y los modelos generativos están marcando el futuro.",

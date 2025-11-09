@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
 interface Blog {
-  id: string | number;
-  titulo: string;
-  descripcion: string;
-  categoria: string;
+  _id: string | number;
+  title: string;
+  description: string;
+  category: string;
   image: string;
 }
 
@@ -13,21 +13,21 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ blog }: BlogCardProps) => {
-  const { titulo, descripcion, categoria, image, id } = blog;
+  const { title, description, category, image, _id } = blog;
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate(`/blog/${id}`)}
+      onClick={() => navigate(`/blog/${blog._id}`)}
       className="w-full rounded-lg overflow-hidden shadow hover:scale-102 hover:shadow-primary/25 duration-300 cursor-pointer"
     >
       <img src={image} alt="" className="aspect-video" />
       <span className="ml-5 mt-4 px-3 py-1 inline-block bg-rose-600/20 rounded-full text-stone-100 text-xs">
-        {categoria}
+        {category}
       </span>
       <div className="p-5">
-        <h5 className="mb-2 font-medium text-gray-900">{titulo}</h5>
-        <p className="mb-3 text-xs text-gray-600" dangerouslySetInnerHTML={{"__html": descripcion.slice(0, 80)}}></p>
+        <h5 className="mb-2 font-medium text-gray-900">{title}</h5>
+        <p className="mb-3 text-xs text-gray-600" dangerouslySetInnerHTML={{"__html": description.slice(0, 80)}}></p>
       </div>
     </div>
   );
