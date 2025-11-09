@@ -1,36 +1,43 @@
-name: Deploy to AWS
+name: Deploy Directo a EC2 (sin Docker)
 
 on:
     push:
         branches:
+            # Se dispara con cualquier push a la rama 'main'
             - main
-        paths:
-            - .github/workflows/aws-deploy.yaml
+        paths-ignore:
+            - '.github/workflows/**'
 
 jobs:
-    build-and-push:
-        name: Deploy to AWS ECS
+    # -----------------------------------------------
+    # Job Único: Desplegar archivos en la instancia EC2
+    # -----------------------------------------------
+    deploy-to-ec2:
+        name: Transferencia y Despliegue SSH
         runs-on: ubuntu-latest
+        
+        env:
+            # Variables de la instancia EC2 y del proceso de despliegue
+            EC2_HOST: ${{ secrets.EC2_HOST }} 
+            EC2_USER: ${{ secrets.EC2_USER }} 
+            # Define la ruta donde quieres guardar el código en tu servidor EC2
+            REMOTE_APP_PATH: /home/${{ secrets.EC2_USER }}/web-app
+
         steps:
             - name: Checkout Code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
+              # Esta acción descarga tu código de GitHub en el runner de Actions
 
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
-
-            - name: login to DockerHub
-              uses: docker/login-action@v2
+            - name: Set up SSH
+              uses: webfactory/ssh-agent@v0.9.0 
               with:
-                username: ${{ secrets.DOCKERHUB_USER }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    
-    deploy-to-ec2:
-        runs-on: ubuntu-latest
-        needs: build-and-push
-        steps:
-          - name: set up ssh
-            uses: webfactory/ssh-agent@v0.5.3
-            with:
-              ssh-private-key: ${{ secrets.EC2_SSH_kEY }}
+                # Usa la clave privada para la conexión
+                ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+                
+            - name: Transferir código (SCP) e Instalar Dependencias (SSH)
+              # Usamos un 'run' para ejecutar comandos que usan SSH y SCP
+              run: npm install
+            - name: Ejecutar
+              run: npm run dev
             
             
