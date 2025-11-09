@@ -6,7 +6,7 @@ export const assets = {
     Upload_area
 }
 
-export const blogCategories = ['All', 'Technology', 'Startup', 'Lifestyle', 'Finance']
+export const blogCategories = ['Todo', 'Tecnologia', 'Viajes', 'Finanzas', 'Comida']
 
 export const blogData = [
     {
@@ -53,15 +53,15 @@ export const dashboard_data = {
 
 export const footer_data = [
   {
-    "title": "Quick Links",
-    "links": ["Home", "Best Sellers", "Offers & Deals", "Contact Us", "FAQ"]
+    "title": "Links",
+    "links": ["Home", "Mas vendidos", "Ofertas", "Contáctanos", "FAQ"]
   },
   {
-    "title": "Need Help?",
-    "links": ["Delivery Information", "Return & Refund Policy", "Payment Methods", "Track your Order", "Contact Us"]
+    "title": "¿Necesitas ayuda?",
+    "links": ["Información de envio", "Politicas", "Metodos de pago"]
   },
   {
-    "title": "Follow Us",
+    "title": "Siguenos",
     "links": ["Instagram", "Twitter", "Facebook", "YouTube"]
   }
 ]

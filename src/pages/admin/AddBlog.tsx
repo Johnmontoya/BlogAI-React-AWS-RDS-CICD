@@ -141,9 +141,9 @@ const AddBlog = () => {
       className="flex-1 bg-blue-50/50 text-gray-600 min-h-screen overflow-auto"
     >
       <div className="bg-white w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Add New Blog</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">Agregar nuevo blog</h1>
 
-        <p className="font-medium mb-2">Upload thumbnail</p>
+        <p className="font-medium mb-2">Subir imagen</p>
         <label htmlFor="image" className="cursor-pointer">
           <img
             src={!image ? assets.Upload_area : URL.createObjectURL(image)}
@@ -160,27 +160,27 @@ const AddBlog = () => {
           required
         />
 
-        <p className="mt-6 font-medium mb-2">Blog Title</p>
+        <p className="mt-6 font-medium mb-2">Titulo del blog</p>
         <input
           type="text"
-          placeholder="Enter blog title"
+          placeholder="Ingresar el titulo"
           required
           className="w-full max-w-lg mt-2 p-3 border border-gray-300 outline-none rounded focus:border-rose-600 transition-colors"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
 
-        <p className="mt-6 font-medium mb-2">Sub Title</p>
+        <p className="mt-6 font-medium mb-2">Subtitulo</p>
         <input
           type="text"
-          placeholder="Enter blog subtitle"
+          placeholder="Ingresa el subtitulo del blog"
           required
           className="w-full max-w-lg mt-2 p-3 border border-gray-300 outline-none rounded focus:border-rose-600 transition-colors"
           onChange={(e) => setSubTitle(e.target.value)}
           value={subTitle}
         />
 
-        <p className="mt-6 font-medium mb-2">Blog Description</p>
+        <p className="mt-6 font-medium mb-2">Descripcion del blog</p>
         <div className="max-w-lg pb-16 sm:pb-10 relative">
           {/* Contenedor del editor - Quill agregará su propia estructura */}
           <div
@@ -203,21 +203,21 @@ const AddBlog = () => {
             {loading ? (
               <>
                 <span className="animate-spin">⚙️</span>
-                Generating...
+                Generando...
               </>
             ) : (
-              "Generate with AI ✨"
+              "Generar con IA ✨"
             )}
           </button>
         </div>
         
         {!title && (
           <p className="text-xs text-gray-500 mt-1">
-            * Add title to enable AI generation
+            * Agrega un titulo para habilitar la IA
           </p>
         )}
 
-        <p className="mt-6 font-medium mb-2">Blog Category</p>
+        <p className="mt-6 font-medium mb-2">Categoria del blog</p>
         <select
           onChange={(e) => setCategory(e.target.value)}
           value={category}
@@ -240,7 +240,7 @@ const AddBlog = () => {
             onChange={(e) => setIsPublished(e.target.checked)}
           />
           <label htmlFor="publish" className="font-medium cursor-pointer">
-            Publish Now
+            Publicar Ahora
           </label>
         </div>
 
@@ -249,7 +249,7 @@ const AddBlog = () => {
           disabled={isAdding}
           className="mt-8 w-40 h-11 bg-rose-600 text-white rounded cursor-pointer text-sm font-medium hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isAdding ? "Adding..." : "Add Blog"}
+          {isAdding ? "Agregando..." : "Agregar blog"}
         </button>
       </div>
     </form>

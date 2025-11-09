@@ -22,11 +22,11 @@ interface Comment {
   __v: number;
 }
 
-type FilterType = "Approved" | "Not Approved";
+type FilterType = "Aprobado" | "No aprobado";
 
 const Comments = () => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [filter, setFilter] = useState<FilterType>("Not Approved");
+  const [filter, setFilter] = useState<FilterType>("No aprobado");
 
   const {axios: axiosInstance} = useAppContext() as AppContextType;
 
@@ -55,35 +55,35 @@ const Comments = () => {
   }, []);
 
   const filteredComments = comments.filter(comment =>
-    filter === "Approved" ? comment.isApproved : !comment.isApproved
+    filter === "Aprobado" ? comment.isApproved : !comment.isApproved
   );
 
   return (
     <div className="flex-1 pt-5 px-5 sm:pt-12 sm:pl-16 bg-blue-50/50 min-h-screen">
       <div className="flex justify-between items-center max-w-6xl mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Comments</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Comentarios</h1>
 
         <div className="flex gap-4">
           <button
-            onClick={() => setFilter("Approved")}
+            onClick={() => setFilter("Aprobado")}
             className={`shadow-sm border rounded-full px-4 py-1.5 cursor-pointer text-xs transition-colors font-medium ${
-              filter === "Approved" 
+              filter === "Aprobado" 
                 ? "text-rose-600 border-rose-600 bg-rose-50" 
                 : "text-gray-700 border-gray-300 hover:border-gray-400"
             }`}
           >
-            Approved ({comments.filter(c => c.isApproved).length})
+            Aprobado ({comments.filter(c => c.isApproved).length})
           </button>
 
           <button
-            onClick={() => setFilter("Not Approved")}
+            onClick={() => setFilter("No aprobado")}
             className={`shadow-sm border rounded-full px-4 py-1.5 cursor-pointer text-xs transition-colors font-medium ${
-              filter === "Not Approved" 
+              filter === "No aprobado" 
                 ? "text-rose-600 border-rose-600 bg-rose-50" 
                 : "text-gray-700 border-gray-300 hover:border-gray-400"
             }`}
           >
-            Not Approved ({comments.filter(c => !c.isApproved).length})
+            No Aprobado ({comments.filter(c => !c.isApproved).length})
           </button>
         </div>
       </div>
@@ -93,13 +93,13 @@ const Comments = () => {
           <thead className="text-xs text-gray-700 text-left uppercase bg-gray-50 border-b">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Blog Title & Comment
+                Titulo del blog y Comentarios
               </th>
               <th scope="col" className="px-6 py-3 max-sm:hidden">
-                Date
+                Fecha
               </th>
               <th scope="col" className="px-6 py-3">
-                Action
+                Acciones
               </th>
             </tr>
           </thead>
@@ -118,11 +118,11 @@ const Comments = () => {
 
         {filteredComments.length === 0 && (
           <div className="text-center py-12 text-gray-500">
-            <p className="text-lg font-medium">No {filter.toLowerCase()} comments found</p>
+            <p className="text-lg font-medium">{filter.toLowerCase()} comentarios no encontrados</p>
             <p className="text-sm mt-2">
-              {filter === "Approved" 
-                ? "There are no approved comments yet." 
-                : "All comments have been approved!"}
+              {filter === "Aprobado" 
+                ? "No hay comentarios aprobados todavia." 
+                : "Todos los comentarios han sido aprobados!"}
             </p>
           </div>
         )}

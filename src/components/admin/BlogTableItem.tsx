@@ -40,7 +40,7 @@ const BlogTableItem: React.FC<BlogTableItemProps> = ({ blog, fetchBlogs, index }
     };
 
   const deleteBlog = async() => {
-    const confirm = window.confirm('Are you sure you want to delete this blog?')
+    const confirm = window.confirm('Estás seguro de querer eliminar este blog?')
     if(!confirm) return
     try {
       const { data } = await axiosInstance.post('/api/blog/delete', { id: blog._id})
@@ -82,7 +82,7 @@ const BlogTableItem: React.FC<BlogTableItemProps> = ({ blog, fetchBlogs, index }
             isPublished ? "text-green-600" : "text-orange-700"
           }`}
         >
-          {isPublished ? "Published" : "Unpublished"}
+          {isPublished ? "Publicado" : "No publicado"}
         </p>
       </td>
       <td className="px-2 py-4">
@@ -95,7 +95,7 @@ const BlogTableItem: React.FC<BlogTableItemProps> = ({ blog, fetchBlogs, index }
                 : "border-green-600 text-green-700 hover:bg-green-50"
             }`}
           >
-            {isPublished ? "Unpublish" : "Publish"}
+            {isPublished ? "No publicado" : "Publicado"}
           </button>
           <AiOutlineDelete size={28} onClick={deleteBlog} className="hover:scale-110 transition-all cursor-pointer" />
         </div>

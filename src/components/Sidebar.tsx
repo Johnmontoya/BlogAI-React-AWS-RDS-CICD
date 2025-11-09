@@ -24,7 +24,7 @@ const Sidebar = () => {
           }`
         }
       >
-        <p className="hidden md:inline-block">Add Blogs</p>
+        <p className="hidden md:inline-block">Agregar Blogs</p>
       </NavLink>
 
       <NavLink
@@ -36,7 +36,7 @@ const Sidebar = () => {
           }`
         }
       >
-        <p className="hidden md:inline-block">Blog lists</p>
+        <p className="hidden md:inline-block">Lista de Blogs</p>
       </NavLink>
 
       <NavLink
@@ -48,7 +48,7 @@ const Sidebar = () => {
           }`
         }
       >
-        <p className="hidden md:inline-block">Comments</p>
+        <p className="hidden md:inline-block">Comentarios</p>
       </NavLink>
     </div>
   );

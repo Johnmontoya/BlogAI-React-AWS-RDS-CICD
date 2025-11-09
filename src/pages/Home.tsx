@@ -1,14 +1,14 @@
 import Navbar from "../components/Navbar";
-import Header from "../components/Header";
 import BlogList from "../components/BlogList";
 import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
+import Banner from "../components/Banner";
 
 const Blog = () => {
     return (
         <div>
             <Navbar />
-            <Header />
+            <Banner />
             <BlogList />
             <Newsletter />
             <Footer />

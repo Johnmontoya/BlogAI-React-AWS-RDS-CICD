@@ -61,7 +61,7 @@ const Login: React.FC = () => {
               <span className="text-rose-600">Admin</span> Login
             </h1>
             <p className="font-light text-gray-600 mt-2">
-              Enter your credentials to access the admin panel
+              Ingresa tus credenciales para ingresar al panel de administración
             </p>
           </div>
 
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
           >
             <div className="flex flex-col mb-6">
               <label htmlFor="email" className="mb-2 font-medium">
-                Email
+                Correo Electrónico
               </label>
               <input
                 id="email"
@@ -86,7 +86,7 @@ const Login: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 required
-                placeholder="your email id"
+                placeholder="ingresa tu email"
                 className="border-b-2 border-gray-300 p-2 outline-none focus:border-rose-600 transition-colors"
                 disabled={isLoading}
               />
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
 
             <div className="flex flex-col mb-6">
               <label htmlFor="password" className="mb-2 font-medium">
-                Password
+                Contraseña
               </label>
               <input
                 id="password"
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 required
-                placeholder="your password"
+                placeholder="ingresa tu contraseña"
                 className="border-b-2 border-gray-300 p-2 outline-none focus:border-rose-600 transition-colors"
                 disabled={isLoading}
               />
@@ -123,7 +123,7 @@ const Login: React.FC = () => {
               <a href="#"
               className="text-sm text-rose-600 hover:underline"
             >
-              Forgot your password?
+              Olvidaste tu contraseña?
             </a>
           </div>
         </div>

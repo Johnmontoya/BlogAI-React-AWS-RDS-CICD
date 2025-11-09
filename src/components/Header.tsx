@@ -1,6 +1,7 @@
 import { FaRegStar } from "react-icons/fa6";
 import { useAppContext, type AppContextType } from "../context/appContext";
 import { useRef } from "react";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const Header = () => {
 
@@ -23,25 +24,14 @@ const Header = () => {
 
   return (
     <div className="mx-8 sm:mx-16 xl:mx-24 relative">
-      <div className="text-center mt-20 mb-8">
-        <div className="inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-4 border border-primary/40 bg-primary/10 rounded-full text-sm text-primary">
-          <p> New: AI feature integrated </p>
-          <FaRegStar className="w-2.5" />
-        </div>
-        <h1 className="text-3xl sm:text-6xl font-semibold sm:leading-16 text-gray-700">
-          Your own <span className="text-primary"> blogging </span> <br />{" "}
-          platform
-        </h1>
-        <p className="my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-gray-500">
-          "This is your space to think out loud, to shate what matters, and to write without filters. 
-        Whether it-s one word or a thousand, your story starts right here"
-        </p>
+
+      <div className="text-center">        
 
         <form onSubmit={onSubmitHandler} className="flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-stone-100 rounded overglow-hidden">
           <input
             type="text"
             ref={inputRef}
-            placeholder="Search for blogs"
+            placeholder="Buscar blog"
             required
             className="w-full pl-4 outline-none"
           />
@@ -56,8 +46,8 @@ const Header = () => {
       
       <div className="text-center">
         {
-          input && <button onClick={onClear} className="border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer">
-          Clear Search
+          input && <button onClick={onClear} className="absolute border font-light mt-6 text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer bg-white">
+          <IoIosCloseCircleOutline size={18} />
         </button>
         }
       </div>

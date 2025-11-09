@@ -2,11 +2,11 @@ import { assets, footer_data } from "../assets/assets";
 
 const Footer = () => {
   return (
-    <div className="px-6 md:px-16 lg:px-24 xl:px-32 bg-rose-600/3">
+    <div className="px-6 md:px-16 lg:px-24 xl:px-32 bg-slate-900">
       <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 bordr-b border-gray-500/30 text-gray-500">
         <div>
-          <img src={assets.Logo} alt="logo" className="w-28 sm:w-40" />
-          <p className="max-w-[410px] mt-6">
+          <img src={assets.Logo} alt="logo" className="w-12 sm:w-20" />
+          <p className="max-w-[410px] mt-6 text-gray-400 justify-start">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum
             debitis assumenda recusandae consectetur, est aliquid perspiciatis
             incidunt sit suscipit magni consequuntur reiciendis itaque placeat
@@ -17,7 +17,7 @@ const Footer = () => {
         <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
             {footer_data.map((section, index) => (
                 <div key={index}>
-                    <h3 className="font-semibold text-base text-gray-900 md:mb-5 mb-2">{section.title}</h3>
+                    <h3 className="font-semibold text-base text-gray-300 md:mb-5 mb-2">{section.title}</h3>
                     <ul className="text-sm space-y-1">
                         {section.links.map((link, i) => (
                             <li key={i}>
@@ -29,8 +29,8 @@ const Footer = () => {
             ))}
         </div>
       </div>
-      <p className="py-4 text-center text-sm md:text-base text-gray-500/80">
-        Copyright 2025 QuickBlog GreatStack - All Right Reserved.
+      <p className="py-4 text-center text-xs md:text-sm text-gray-400">
+        Copyright 2025 johnMontoya - All Right Reserved.
       </p>
     </div>
   );

@@ -133,7 +133,7 @@ const Blog = () => {
       <Navbar />
       <div className="text-center mt-20 text-gray-600">
         <p className="text-rose-600 py-4 font-medium">
-          Published on {moment(data.createdAt).format("MMMM Do YYYY")}
+          Publicado en {moment(data.createdAt).format("MMMM Do YYYY")}
         </p>
         <h1 className="text-2xl sm:text-5xl font-semibold max-w-2xl mx-auto text-gray-800">
           {data.title}
@@ -142,7 +142,7 @@ const Blog = () => {
           {data.subTitle}
         </h2>
         <p className="inline-block py-1 px-4 rounded-full mb-6 border text-sm border-rose-600/35 bg-rose-600/5 font-medium text-primary">
-          Michael Brown
+          {data.title}
         </p>
       </div>
 
@@ -154,7 +154,7 @@ const Blog = () => {
 
         {/* Comments Section */}
         <div className="mt-14 mb-10 max-w-3xl mx-auto">
-          <p className="font-semibold mb-4 text-xl">Comments ({comments.length})</p>
+          <p className="font-semibold mb-4 text-xl">Comentarios ({comments.length})</p>
           
           {comments.length > 0 ? (
             <div className="flex flex-col gap-4">
@@ -176,14 +176,14 @@ const Blog = () => {
             </div>
           ) : (
             <p className="text-gray-500 text-center py-8">
-              No comments yet. Be the first to comment!
+              No hay comentarios aún. Se el primero!
             </p>
           )}
         </div>
 
         {/* Add Comment Section */}
         <div className="max-w-3xl mx-auto">
-          <p className="font-semibold mb-4 text-xl">Add your comment</p>
+          <p className="font-semibold mb-4 text-xl">Agrega un comentario</p>
           <form
             onSubmit={addComment}
             className="flex flex-col items-start gap-4 max-w-lg"
@@ -192,12 +192,12 @@ const Blog = () => {
               type="text"
               onChange={(e) => setName(e.target.value)}
               value={name}
-              placeholder="Your name"
+              placeholder="Tu nombre"
               required
               className="w-full p-3 border border-gray-300 rounded outline-none focus:border-rose-600 transition-colors"
             />
             <textarea
-              placeholder="Your comment"
+              placeholder="Tu comentario"
               onChange={(e) => setContent(e.target.value)}
               value={content}
               className="w-full p-3 border border-gray-300 rounded outline-none h-32 focus:border-rose-600 transition-colors resize-none"
@@ -207,7 +207,7 @@ const Blog = () => {
               type="submit"
               className="bg-rose-600 text-white px-6 py-2.5 rounded hover:bg-rose-700 transition-colors font-medium"
             >
-              Submit Comment
+              Enviar comentario
             </button>
           </form>
         </div>
@@ -215,7 +215,7 @@ const Blog = () => {
         {/* Share Buttons */}
         <div className="my-24 max-w-3xl mx-auto">
           <p className="font-semibold my-4 text-lg">
-            Share this article on social media
+            Comparte este artículo en las redes sociales
           </p>
           <div className="flex gap-4">
             <button className="hover:scale-110 transition-transform">

@@ -63,7 +63,7 @@ const CommenTableItem: React.FC<CommentTableItemProps> = ({
 
   const handleUnapproveComment = async () => {
     try {
-      const confirm = window.confirm('Are you sure you want to delete this comment?')
+      const confirm = window.confirm('Estas seguro de querer eliminar este comentario?')
       if(!confirm) return;
 
       const { data } = await axiosInstance.post('/api/admin/delete-comment', {id: _id})
@@ -91,11 +91,11 @@ const CommenTableItem: React.FC<CommentTableItemProps> = ({
             </span>
           </p>
           <p>
-            <span className="font-medium text-gray-600">Name:</span>{" "}
+            <span className="font-medium text-gray-600">Nombre:</span>{" "}
             <span className="text-gray-800">{name}</span>
           </p>
           <p>
-            <span className="font-medium text-gray-600">Comment:</span>{" "}
+            <span className="font-medium text-gray-600">Comentario:</span>{" "}
             <span className="text-gray-800">{content}</span>
           </p>
         </div>
@@ -121,12 +121,12 @@ const CommenTableItem: React.FC<CommentTableItemProps> = ({
               title="Click to approve"
             >
               <CiStickyNote className="w-4 h-4" />
-              <span className="text-xs font-medium">Approve</span>
+              <span className="text-xs font-medium">Aprobado</span>
             </button>
           ) : (
             <div className="flex items-center gap-2">
               <span className="inline-block text-xs border border-green-600 bg-green-100 text-green-700 rounded-full px-3 py-1 font-medium">
-                Approved
+                Aprobados
               </span>
               <button
                 onClick={handleUnapproveComment}

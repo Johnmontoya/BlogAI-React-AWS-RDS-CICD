@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { blogCategories, blogData } from "../assets/assets";
+import { blogCategories} from "../assets/assets";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
 import { useAppContext, type AppContextType } from "../context/appContext";
 
 const BlogList = () => {
-  const [menu, setMenu] = useState("All");
+  const [menu, setMenu] = useState("Todo");
   const {blogs, input} = useAppContext() as AppContextType; // Si necesitas búsqueda
 
   const filteredBlogs = () => {
@@ -21,7 +21,7 @@ const BlogList = () => {
     }
 
     // Filtrar por categoría
-    if (menu !== "All") {
+    if (menu !== "Todo") {
       filtered = filtered.filter((blog) => blog.category === menu);
     }
 

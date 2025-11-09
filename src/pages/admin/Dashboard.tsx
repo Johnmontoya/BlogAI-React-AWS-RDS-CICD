@@ -49,19 +49,19 @@ const Dashboard = () => {
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
           <p className="text-xl font-semibold text-gray-600">{dashboardData.comments}</p>
-          <p className="text-gray-400 font-light">Comments</p>
+          <p className="text-gray-400 font-light">Comentarios</p>
         </div>
       </div>
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
           <p className="text-xl font-semibold text-gray-600">{dashboardData.drafts}</p>
-          <p className="text-gray-400 font-light">Drafts</p>
+          <p className="text-gray-400 font-light">Borrador</p>
         </div>
       </div>
 
       <div>
         <div className="flex items-center gap-3 m-4 mt-6 text-gray-600">
-          <p>Latest Blogs</p>
+          <p>Ultimos blogs</p>
         </div>
 
         <div className="relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
@@ -69,10 +69,10 @@ const Dashboard = () => {
             <thead className="text-xs text-gray-600 text-left uppercase">
               <tr>
                 <th scope="col" className="px-2 py-4 xl:px-6"> # </th>
-                <th scope="col" className="px-2 py-4"> Blog Title </th>
-                <th scope="col" className="px-2 py-4 max-sm:hidden"> Date </th>
-                <th scope="col" className="px-2 py-4 max-sm:hidden"> Status </th>
-                <th scope="col" className="px-2 py-4"> Actions </th>
+                <th scope="col" className="px-2 py-4"> Titulo del blog </th>
+                <th scope="col" className="px-2 py-4 max-sm:hidden"> Fecha </th>
+                <th scope="col" className="px-2 py-4 max-sm:hidden"> Estados </th>
+                <th scope="col" className="px-2 py-4"> Acciones </th>
               </tr>
             </thead>
             <tbody>
