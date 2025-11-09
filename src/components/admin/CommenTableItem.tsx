@@ -26,10 +26,9 @@ interface CommentTableItemProps {
 
 const CommenTableItem: React.FC<CommentTableItemProps> = ({
   comment,
-  fetchComments,
-  index,
+  fetchComments,  
 }) => {
-  const { createdAt, _id, name, content, isApproved } = comment;
+  const { createdAt, _id, name, content } = comment;
   const BlogDate = new Date(createdAt);
 
   const {axios: axiosInstance} = useAppContext() as AppContextType;

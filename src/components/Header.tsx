@@ -1,4 +1,3 @@
-import { FaRegStar } from "react-icons/fa6";
 import { useAppContext, type AppContextType } from "../context/appContext";
 import { useRef } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";

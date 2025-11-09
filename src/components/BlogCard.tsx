@@ -13,7 +13,7 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ blog }: BlogCardProps) => {
-  const { title, description, category, image, _id } = blog;
+  const { title, description, category, image } = blog;
   const navigate = useNavigate();
 
   return (
